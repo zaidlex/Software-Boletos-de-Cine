@@ -1,19 +1,41 @@
 package com.mg.softwarecompradeboletosdecine;
 
+import javax.swing.JFrame;
 import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-public class InterfazCartelera extends JFrame {
-    
+public class InterfazCartelera {
+    JFrame IntCartelera;
+    JPanel panelCartelera;
+
     private JButton BotonesCartelera;//botones para la cartelera
     private JLabel NombreEmpresa;//Nombre de la empresa
+    private int width = 1000;
+    private int height = 700;
 
     public void InterfazCartelera(){//Constructor
-        setLayout(null);
+        IntCartelera = new JFrame();
+        panelCartelera = new JPanel();
+        startPanel();
+
+        startInterfazCartelera();
         startItems();
         addCartelera();
         addItems();
+    }
+
+    private void startInterfazCartelera(){
+        //Caracteristicas de la interfaz de la cartelera
+        IntCartelera.setSize(width, height);
+        IntCartelera.setLayout(null);
+        IntCartelera.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        IntCartelera.setVisible(true);
+    }
+
+    private void startPanel(){
+        IntCartelera.getContentPane().add(panelCartelera);
+        panelCartelera.setBounds(0, 0, width, height);
     }
 
     private void startItems(){
@@ -27,7 +49,7 @@ public class InterfazCartelera extends JFrame {
     }
 
     public void addItems(){
-        add(NombreEmpresa);
-        //this.add(BotonesCartelera);
+        panelCartelera.add(NombreEmpresa);
+        panelCartelera.add(BotonesCartelera);
     }
 }
