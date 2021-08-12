@@ -1,5 +1,3 @@
-package com.mg.softwarecompradeboletosdecine;
-
 public class MCompraBoletos {
     
     public static void main(String args[]){  
