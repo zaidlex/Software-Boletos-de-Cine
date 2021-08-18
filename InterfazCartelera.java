@@ -2,6 +2,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime; 
 
 public class InterfazCartelera {
     JFrame intCartelera;//interfaz principal 
@@ -10,6 +12,7 @@ public class InterfazCartelera {
 
     private JButton botonesCartelera;//botones para la cartelera
     private JLabel nombreEmpresa;//Nombre de la empresa
+    private JLabel tiempoActual;//Nombre de la empresa
     private int width = 1000;//tamano en ancho
     private int height = 700;//tamano en alto
 
@@ -42,7 +45,9 @@ public class InterfazCartelera {
 
     private void startItems(){//inicializa los items
         nombreEmpresa = new JLabel("Bienvenido a 'Nombre de la empresa'");
-        nombreEmpresa.setBounds(40,40,200,30);
+        nombreEmpresa.setBounds(300,40,400,30);
+        tiempoActual = new JLabel(getTime());
+        tiempoActual.setBounds(750,160,150,30);
     }
 
     public void addCartelera(){//inicializa los botones (Peliculas)
@@ -52,9 +57,10 @@ public class InterfazCartelera {
         botonesCartelera = null;
     }
 
-    public void addItems(){//agrega los items al panel bienvenida
+    public void addItems(){//agrega los items a los paneles
         panelBienvenida.add(nombreEmpresa);
-        panelBienvenida.add(botonesCartelera);
+        panelBienvenida.add(tiempoActual);
+        //panelCartelera.add(botonesCartelera);
     }
 
     private void viewMovie(){//Inicia la interfaz de pelicula
@@ -62,5 +68,12 @@ public class InterfazCartelera {
         //la interfaz principal no desaparece ni se cierra
         InterfazPelicula IPelicula;
         IPelicula = new InterfazPelicula();
+    }
+
+    private String getTime(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        return dtf.format(now).toString();
+        //return "2021/08/17 11:18:40";
     }
 }
