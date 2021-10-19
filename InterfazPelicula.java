@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+//import javax.swing.JButton;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InterfazPelicula {
@@ -10,7 +10,7 @@ public class InterfazPelicula {
     private int width = 700;
     private int height = 400;
 
-    public void InterfazPelicula(){//constructor de la interfaz
+    public void initInterfazPelicula(int idPelicula){//constructor de la interfaz
         intPelicula = new JFrame();
         panelPelicula = new JPanel();
 
@@ -26,7 +26,7 @@ public class InterfazPelicula {
     }
 
     private void startPanel(){//Caracteristicas del panel principal
-        intPelicula.getContentPane().add(panelCartelera);
-        panelCartelera.setBounds(0, 0, width, height);
+        intPelicula.getContentPane().add(panelPelicula);
+        panelPelicula.setBounds(0, 0, width, height);
     }
 }
