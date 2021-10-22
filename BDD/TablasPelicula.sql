@@ -9,7 +9,9 @@ CREATE TABLE IF NOT EXISTS Pelicula (
 	Director varchar(100) NOT NULL,
 	Actores TEXT NOT NULL,
 	Distribuidora varchar(50) NOT NULL,
-	Duracion varchar(15) NOT NULL
+	Duracion varchar(15) NOT NULL,
+	Extreno DATE NOT NULL, /*dia/mes/año*/
+	FinCartelera DATE NOT NULL /*dia/mes/año*/
 );
 
 CREATE TABLE IF NOT EXISTS Poster (
@@ -23,6 +25,7 @@ CREATE TABLE IF NOT EXISTS Sala (
     IDSala INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	IDPelicula INT UNSIGNED,
 	Nombre_Sala ENUM('s1', 's2', 's3', 's4', 's5') NOT NULL,
+	Hora TIME NOT NULL, /*hora:minutos*/
 	FOREIGN KEY (IDPelicula)
 	    REFERENCES Pelicula (IDPelicula)
 );
@@ -50,14 +53,6 @@ CREATE TABLE IF NOT EXISTS GenerosPeliculas(
 	    REFERENCES Genero(IDGenero)
 );
 
-CREATE TABLE IF NOT EXISTS Horario(
-	IDPelicula INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	Hora TIME NOT NULL, /*hora:minutos*/
-	Fecha DATE NOT NULL, /*dia/mes/año*/
-	FOREIGN KEY (IDPelicula)
-	    REFERENCES Pelicula (IDPelicula)
-);
-
 CREATE TABLE IF NOT EXISTS Idioma (
 	IDIdioma TINYINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	Idioma VARCHAR(50) NOT NULL UNIQUE
@@ -78,7 +73,7 @@ CREATE TABLE IF NOT EXISTS Clasificacion (
 	Descripcion varchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS ClasificacionesPelicula (
+CREATE TABLE IF NOT EXISTS ClasificacionPelicula (
     IDPelicula INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	IDClasificacion TINYINT UNSIGNED,
 	FOREIGN KEY (IDPelicula)
