@@ -1,20 +1,23 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import java.time.format.DateTimeFormatter;  
-import java.time.LocalDateTime;
+import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Image;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.io.File;
 import java.sql.*;
 import java.sql.SQLException;
 
 public class InterfazCartelera {
-    JFrame intCartelera;//interfaz principal 
-    JPanel panelBienvenida;//panel de bienvenida
-    JPanel panelCartelera;//panel donde estaran los botones de las peliculas
+    private JFrame intCartelera;//interfaz principal 
+    private JPanel panelBienvenida;//panel de bienvenida
+    private JPanel panelCartelera;//panel donde estaran los botones de las peliculas
+    JScrollPane panelScroll;
 
     private JButton botonesCartelera[];//botones para la cartelera
     private JLabel nombreEmpresa;//Nombre de la empresa
@@ -27,19 +30,21 @@ public class InterfazCartelera {
         panelCartelera = new JPanel();
         panelBienvenida = new JPanel();
 
-        panelCartelera.setBackground(Color.LIGHT_GRAY);
-        panelBienvenida.setBackground(Color.CYAN);
-
         startInterfazCartelera();//inicia la interfaz
         startPanels();//inicia los paneles
         startItems();//inicia los items (labels, buttons, etc...)
-        addCartelera();//agrega los botones de las peliculas al panel de la cartelera
+        initCartelera();//agrega los botones de las peliculas al panel de la cartelera
         addItems();//agrega los items al panel bienvenida
+        startPanelScroll();
+
+        intCartelera.add(panelBienvenida);
+        intCartelera.add(panelScroll);
+        intCartelera.repaint();
     }
 
     private void startInterfazCartelera(){//Caracteristicas de la interfaz de la cartelera
         intCartelera.setSize(width, height);
-        intCartelera.setLayout(null);
+        //intCartelera.setLayout(null);
         intCartelera.setResizable(false);
         //al hacer click en la X cierra todo
         intCartelera.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,10 +52,24 @@ public class InterfazCartelera {
     }
 
     private void startPanels(){//Caracteristicas del panel bienvenida
-        intCartelera.getContentPane().add(panelBienvenida);
+        panelBienvenida.setBackground(Color.CYAN);
+        panelBienvenida.setSize(width, 200);
         panelBienvenida.setBounds(0, 0, width, 200);//(0,0) a (1000,200)
-        intCartelera.getContentPane().add(panelCartelera);
-        panelCartelera.setBounds(0, 200, width, height);//(0,200) a (1000, 700)
+        panelBienvenida.setLayout(null);
+        
+        panelCartelera.setBackground(Color.LIGHT_GRAY);
+        //panelCartelera.setSize(width, 470);
+        //panelCartelera.setBounds(0, 200, width, 470);//(0,200) a (1000, 700)
+        panelCartelera.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
+    }
+
+    private void startPanelScroll(){
+        panelScroll = new JScrollPane();
+        panelScroll.setViewportView(panelCartelera);
+
+        panelScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelScroll.setSize(width, 470);
+        panelScroll.setBounds(0, 200, width, 470); // -30 por el scroll
     }
 
     private void startItems(){//inicializa los items
@@ -60,7 +79,7 @@ public class InterfazCartelera {
         tiempoActual.setBounds(750,160,150,30);
     }
 
-    private void addCartelera() {//inicializa los botones (Peliculas)
+    private void initCartelera() {//inicializa los botones (Peliculas)
         // Crea el directorio de los posters
         File directory = new File("Posters");
         if (! directory.exists())
@@ -73,7 +92,6 @@ public class InterfazCartelera {
         try{
             int NumMovies = 0;
             int numMovie = 0;
-            int x_Button = 20;
             //Aquí se creará los botones para cada película (lista)
             Class.forName("com.mysql.cj.jdbc.Driver"); // carga del driver
             // conexion a la base de datos
@@ -87,16 +105,16 @@ public class InterfazCartelera {
                 resultQuery.beforeFirst(); // not rs.first() because the rs.next() below will move on, missing the first element
             }
 
+            // iniciando los botones para los posters
             botonesCartelera = new JButton[NumMovies];
-
+    
             while(resultQuery.next()){
-                System.out.println(resultQuery.getInt(1)+"  "+resultQuery.getString("Poster_pel"));
-                // Boton con imagen
+                // Crea el boton con imagen
                 botonesCartelera[numMovie] = new JButton( resizeImagen("Posters/"+resultQuery.getString("Poster_pel") ));
-                botonesCartelera[numMovie].setBounds(x_Button, 20, 300, 400);
+                botonesCartelera[numMovie].setSize(300, 400);
                 numMovie++;
-                x_Button += 420; // 400 de la imagen-boton y 20 de espacio entre botones
             }
+            
         }catch(SQLException err){
             System.out.println(err.getMessage());
         }catch (Exception ex) {
@@ -137,7 +155,7 @@ public class InterfazCartelera {
     }
 */
     private String getTime(){//ontiene el tiempo actual
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
         LocalDateTime now = LocalDateTime.now();  
         return dtf.format(now).toString();
     }
