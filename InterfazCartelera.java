@@ -44,7 +44,7 @@ public class InterfazCartelera {
 
     private void startInterfazCartelera(){//Caracteristicas de la interfaz de la cartelera
         intCartelera.setSize(width, height);
-        //intCartelera.setLayout(null);
+        intCartelera.setTitle("Cartelera");
         intCartelera.setResizable(false);
         //al hacer click en la X cierra todo
         intCartelera.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,8 +110,12 @@ public class InterfazCartelera {
     
             while(resultQuery.next()){
                 // Crea el boton con imagen
-                botonesCartelera[numMovie] = new JButton( resizeImagen("Posters/"+resultQuery.getString("Poster_pel") ));
-                botonesCartelera[numMovie].setSize(300, 400);
+                botonesCartelera[numMovie] = new JButton( 
+                    resizeImagen("Posters/"+resultQuery.getString("Poster_pel") )
+                    );
+                
+                botonesCartelera[numMovie].addActionListener(new posterActionListener(resultQuery.getInt("IDPelicula")));  
+
                 numMovie++;
             }
             
@@ -145,15 +149,7 @@ public class InterfazCartelera {
             panelCartelera.add(botonesCartelera[boton]);
         }
     }
-/*
-    private void viewMovie(int idPelicula){//Inicia la interfaz de pelicula
-        //llama a la interfaz de pelicula al hacer click al boton correspondiente
-        //la interfaz principal no desaparece ni se cierra
-        InterfazPelicula IPelicula;
-        IPelicula = new InterfazPelicula();
-        IPelicula.initInterfazPelicula(idPelicula);
-    }
-*/
+
     private String getTime(){//ontiene el tiempo actual
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
         LocalDateTime now = LocalDateTime.now();  
