@@ -93,7 +93,6 @@ public class panelSala extends JPanel{
             DicSalaHora.forEach((key,value)->sala.addItem(key));
 
             sala.addItemListener ( new SalaBox( primeraFuncion, horario, DicSalaHora) );
-            horario.addItemListener( new HoraBox(sala, sillas) );
 
         }catch(SQLException err){
             System.out.println(err.getMessage());
@@ -159,6 +158,8 @@ public class panelSala extends JPanel{
                     height_sillas); // height
             }
         }
+        // agrega el listener al combobox de hora
+        horario.addItemListener( new HoraBox(sala, sillas) );
 
         comprar = new JButton("Comprar");
         comprar.setFont(new Font(Font.SERIF, Font.BOLD, 16));

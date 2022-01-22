@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.sql.*;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 public class InterfazCartelera {
     private JFrame intCartelera;//interfaz principal 
@@ -82,6 +83,11 @@ public class InterfazCartelera {
         Statement stmt = null;
         ResultSet resultQuery = null;
         String PosterPath="";
+        //obtiene fecha actual
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+        String fecha_actual = formatter.format(date).toString();
+        System.out.println("SELECT * FROM Cartelera WHERE '"+fecha_actual+"' BETWEEN Extreno AND FinCartelera");
 
         try{
             int NumMovies = 0;
@@ -92,7 +98,8 @@ public class InterfazCartelera {
             con = DriverManager.getConnection("jdbc:mariadb://localhost/Cine?" +
                 "user=UsrCine&password=c!n3#8732");
             stmt = con.createStatement();
-            resultQuery = stmt.executeQuery("select * from Poster");// obtine el nombre del poster de cada pelicula
+            //"SELECT * FROM Cartelera WHERE '"+fecha_actual+"' BETWEEN Extreno AND FinCartelera"
+            resultQuery = stmt.executeQuery("SELECT * FROM Cartelera WHERE '"+fecha_actual+"' BETWEEN Extreno AND FinCartelera");// obtine el nombre del poster de cada pelicula
             
             if (resultQuery.last()) {
                 NumMovies = resultQuery.getRow();
