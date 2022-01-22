@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Image;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.io.File;
 import java.sql.*;
 import java.sql.SQLException;
 
@@ -52,14 +51,12 @@ public class InterfazCartelera {
     }
 
     private void startPanels(){//Caracteristicas del panel bienvenida
-        panelBienvenida.setBackground(Color.CYAN);
+        panelBienvenida.setBackground(Color.GRAY);
         panelBienvenida.setSize(width, 200);
         panelBienvenida.setBounds(0, 0, width, 200);//(0,0) a (1000,200)
         panelBienvenida.setLayout(null);
         
         panelCartelera.setBackground(Color.LIGHT_GRAY);
-        //panelCartelera.setSize(width, 470);
-        //panelCartelera.setBounds(0, 200, width, 470);//(0,200) a (1000, 700)
         panelCartelera.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
     }
 
@@ -80,14 +77,11 @@ public class InterfazCartelera {
     }
 
     private void initCartelera() {//inicializa los botones (Peliculas)
-        // Crea el directorio de los posters
-        File directory = new File("Posters");
-        if (! directory.exists())
-            directory.mkdir();
-        
+        // conexiones a la base de datos
         Connection con = null;
         Statement stmt = null;
         ResultSet resultQuery = null;
+        String PosterPath="";
 
         try{
             int NumMovies = 0;
@@ -109,13 +103,16 @@ public class InterfazCartelera {
             botonesCartelera = new JButton[NumMovies];
     
             while(resultQuery.next()){
+                PosterPath = "Posters/"+resultQuery.getString("Poster_pel");
                 // Crea el boton con imagen
                 botonesCartelera[numMovie] = new JButton( 
-                    resizeImagen("Posters/"+resultQuery.getString("Poster_pel") )
+                    resizeImagen( PosterPath)
                     );
                 
-                botonesCartelera[numMovie].addActionListener(new posterActionListener(resultQuery.getInt("IDPelicula")));  
-
+                botonesCartelera[numMovie].addActionListener(new PosterListener(resultQuery.getInt("IDPelicula"),PosterPath, intCartelera));  
+                botonesCartelera[numMovie].setBackground(Color.LIGHT_GRAY);
+                botonesCartelera[numMovie].setOpaque(true);
+                botonesCartelera[numMovie].setBorderPainted(false);
                 numMovie++;
             }
             
@@ -159,7 +156,7 @@ public class InterfazCartelera {
     private ImageIcon resizeImagen(String Path){
         ImageIcon imageIcon = new ImageIcon(Path); // load the image to a imageIcon
         Image image = imageIcon.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(300, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(320, 400,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
         return  new ImageIcon(newimg);  // transform it back
     }
 }
